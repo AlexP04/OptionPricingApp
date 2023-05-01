@@ -45,7 +45,6 @@ class TreeOptionPricing():
     def __system_equations(self, x):
         # just local variable that contains number of variants
         midpoint = self.variants
-        number_of_equations = 0
         
         # init current factors (for adjustment of stock price) and probabilities (for each factor adjustment)
         factors = np.array(x[0:midpoint])
@@ -58,40 +57,41 @@ class TreeOptionPricing():
         expectance = np.sum(factors*probabilities)
         risk_free_increment = np.exp(self.risk_free_rate*self.time_step)
         arbitrage_equation = expectance - risk_free_increment
-        number_of_equations += 1
-        
+     
         # variation should be not changing significantly over a time- that change should be minimized
         second_starting_moment = np.sum((factors**2)*probabilities)
         variation = second_starting_moment - expectance**2
         variation_equation = variation - self.sigma**2*self.time_step # in general + o(t), but for a low t - time step we cross it out
-        number_of_equations += 1
-        
+       
         # equations to make tree recombining
         factor_equations_reverse = []
         for i in range(int(midpoint/2)):
-            print("$u_{} = (u_{})^(-1)$".format(i, midpoint -1 -i))
             factor_equations_reverse.append(factors[i] - 1/factors[midpoint -1 -i])
-        number_of_equations += int(midpoint/2)
         
         # factors should be degrees of some number u (auxiliary variable)
         factor_equations_equality = []
         for i in range(0, int(midpoint/2)):
-            print("$u_{} = u^{}$".format(i,int(midpoint/2) -i))
             factor_equations_equality.append(factors[i] - u**( int(midpoint/2) -i))
-        number_of_equations += int(midpoint/2)
-        
+
         if midpoint%2 == 1:
-            factor_equations_equality.append(factors[int(midpoint/2) + 1] - 1)
-            number_of_equations += 1
+            factor_equations_equality.append(factors[int(midpoint/2)] - 1)
         
         # sum of probabilities is equal to 1  
-        probability_equation = np.sum(probabilities) - 1
-        number_of_equations += 1
-        
-        dummy_equations = [0]*(x.shape[0] - number_of_equations)
+        probability_equations = []
+
+        for i in range(1, midpoint):
+            
+            probability_equations.append(
+                probabilities[i] - (
+                    factors[i-1] - factors[i]
+                )/(
+                    factors[0] - factors[midpoint - 1]
+                )
+            
+            )
         
         return (arbitrage_equation, variation_equation, *factor_equations_equality, 
-                *factor_equations_reverse, probability_equation, *dummy_equations)
+                *factor_equations_reverse, *probability_equations)
         
         
     def forward_initialization(self):
@@ -151,9 +151,9 @@ class TreeOptionPricing():
         else:
             # general model for more n > 3
             # solution that consist from factors and probabilities in that order (+ auxiliary variable that is odd)
-            solution = fsolve(self.__system_equations, [2]*self.variants+[1/self.variants]*self.variants+[1])
-   
-            # retrieving factors and probabilities
+            solution = fsolve(self.__system_equations, [2]*(self.variants-1)+[0.5]+[1/self.variants]*self.variants+[2])
+         
+            # retrieving factors and probabilities (warning: can have some accuracy issues regarding to iteration process)
             self.factors = solution[:self.variants].copy()
             self.probabilities = solution[self.variants:-1].copy()
     
@@ -267,8 +267,6 @@ class TreeOptionPricing():
             
         # rounding and sorting
         next_layer = [round(elem, digits_to_round) for elem in next_layer]
-
-#         assert len(next_layer) + self.variants-1 == layer_size, "Next layer number of nodes is unexpected."
         
         self.option_layers.append(next_layer)
 
