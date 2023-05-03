@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+from scipy.optimize import fsolve
+
 class TreeOptionPricing():
     def __init__(self, input_parameters):
         ## input parameters as a dictonary with data being used 
@@ -226,7 +230,7 @@ class TreeOptionPricing():
         # Output is inner price of an option
         
         assert option_type in ['call', 'put'], "Option type should be \"call\" or \"put\" only"
-        assert stock_price > 0, "Stock price should be positive"
+        assert stock_price >= 0, "Stock price should be positive or zero"
         assert strike_price > 0, "Strike price should be positive"
         
         if option_type == 'call':
@@ -266,7 +270,6 @@ class TreeOptionPricing():
         # rounding and sorting
         next_layer = [round(elem, digits_to_round) for elem in next_layer]
 
-#         assert len(next_layer) + self.variants-1 == layer_size, "Next layer number of nodes is unexpected."
         
         self.option_layers.append(next_layer)
 
