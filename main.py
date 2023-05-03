@@ -20,12 +20,12 @@ col1, col2 = st.columns(spec=[2, 2])
 col1.header('Stock information:')
 # entering stocks data
 try:
-    stocks_prices = col1.file_uploader('Input stock prices timeseries: ', type=['csv'], key='input_file')
+    stock_prices = col1.file_uploader('Input stock prices timeseries: ', type=['csv'], key='input_file')
     input_df = pd.read_csv(stocks_prices, delimiter=',', decimal='.', index_col=0)
 except:
     # default case - no data entered
     stock_prices = pd.read_csv('default_stock_data.csv', delimiter=',', decimal='.', index_col=0)
-    col1.title('Check input again')
+    col1.header('Check input again')
     
 derive_sigma = col1.checkbox("Enable sigma derivation from data", value=True)
 sigma = col1.number_input('Custom sigma (if preciding option is disabled)', value= 0.0, step=0.1, key='sigma')
