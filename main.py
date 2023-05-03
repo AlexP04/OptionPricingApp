@@ -9,8 +9,8 @@ from OptionPricing import TreeOptionPricing
 
 # basic webpage settings
 st.set_page_config(
-    page_title='Option Pricing Models',
-    layout='wide')
+    page_title='Option Pricing Models'
+)
 
 st.title('Option Pricing Models')
 
