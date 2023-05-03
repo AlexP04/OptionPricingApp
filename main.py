@@ -39,11 +39,11 @@ option_type = col1.radio('Option type', ['call', 'put'])
 
 st.header('Market information:')
 # market info
-risk_free_rate = col1.number_input('Risk free rate (%)', value=0.0, step=0.1, key='risk_free_rate')
+risk_free_rate = col2.number_input('Risk free rate (%)', value=0.0, step=0.1, key='risk_free_rate')
 
 st.header('Model specification')
 # specify number of sibling nodes - 2 = binomial, 3 = trinomaial, 4+ - generalized model.
-number_of_variants = col1.number_input('Number of variants for a model (2 - binomial,  3- trinomial, 4+ - generalized model)', value=2, step=1, key='n')
+number_of_variants = col2.number_input('Number of variants for a model (2 - binomial,  3- trinomial, 4+ - generalized model)', value=2, step=1, key='n')
 
 params = {
     "stock_prices": stock_prices,
@@ -57,8 +57,8 @@ params = {
     'type': option_type
 }
 
-accuracy = col1.number_input('Accuracy for model (number of digits):', value=2, step=1, key='accuracy')
-agg_method = col1.radio('Aggregation method for option\'s tree', ['mean', 'max', 'min'])
+accuracy = col2.number_input('Accuracy for model (number of digits):', value=2, step=1, key='accuracy')
+
                         
 if addon.button('RUN', key='run'):
     # initializing class
@@ -69,8 +69,8 @@ if addon.button('RUN', key='run'):
     
     # output - trees for stock and option prices
     
-    #predict for time we are interested for
-    res = model.predict( T, agg_method)
+    #predict for time we are interested for (in 0)
+    res = model.predict( 0, "mean")
     
     col2.write('Prediction result:' + str(res))
     
