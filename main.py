@@ -25,7 +25,7 @@ try:
 except:
     # default case - no data entered
     stock_prices = pd.read_csv('default_stock_data.csv', delimiter=',', decimal='.', index_col=0)
-    st.title('Check input again')
+    col1.title('Check input again')
     
 derive_sigma = col1.checkbox("Enable sigma derivation from data", value=True)
 sigma = col1.number_input('Custom sigma (if preciding option is disabled)', value= 0.0, step=0.1, key='sigma')
