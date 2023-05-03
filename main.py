@@ -1,5 +1,4 @@
 # import different modules
-from faulthandler import disable
 import streamlit as st
 import pandas as pd
 import numpy as np
