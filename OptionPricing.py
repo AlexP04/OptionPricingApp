@@ -57,12 +57,7 @@ class TreeOptionPricing():
         expectance = np.sum(factors*probabilities)
         risk_free_increment = np.exp(self.risk_free_rate*self.time_step)
         arbitrage_equation = expectance - risk_free_increment
-     
-        # variation should be not changing significantly over a time- that change should be minimized
-        second_starting_moment = np.sum((factors**2)*probabilities)
-        variation = second_starting_moment - expectance**2
-        variation_equation = variation - self.sigma**2*self.time_step # in general + o(t), but for a low t - time step we cross it out
-       
+
         # equations to make tree recombining
         factor_equations_reverse = []
         for i in range(int(midpoint/2)):
@@ -90,8 +85,8 @@ class TreeOptionPricing():
             
             )
         
-        return (arbitrage_equation, variation_equation, *factor_equations_equality, 
-                *factor_equations_reverse, *probability_equations)
+        return (arbitrage_equation, *factor_equations_equality, 
+                *factor_equations_reverse, *probability_equations, 0)
         
         
     def forward_initialization(self):
@@ -152,8 +147,11 @@ class TreeOptionPricing():
             # general model for more n > 3
             # solution that consist from factors and probabilities in that order (+ auxiliary variable that is odd)
             solution = fsolve(self.__system_equations, [2]*(self.variants-1)+[0.5]+[1/self.variants]*self.variants+[2])
-         
-            # retrieving factors and probabilities (warning: can have some accuracy issues regarding to iteration process)
+            solution2 = fsolve(self.__system_equations, [0.25]*(self.variants-1)+[0.1]+[1/self.variants]*self.variants+[3])
+            
+            print(solution)
+            print(solution2)
+            # retrieving factors and probabilities
             self.factors = solution[:self.variants].copy()
             self.probabilities = solution[self.variants:-1].copy()
     
@@ -267,6 +265,8 @@ class TreeOptionPricing():
             
         # rounding and sorting
         next_layer = [round(elem, digits_to_round) for elem in next_layer]
+
+#         assert len(next_layer) + self.variants-1 == layer_size, "Next layer number of nodes is unexpected."
         
         self.option_layers.append(next_layer)
 
