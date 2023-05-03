@@ -60,7 +60,7 @@ params = {
 accuracy = col2.number_input('Accuracy for model (number of digits):', value=2, step=1, key='accuracy')
 
                         
-if addon.button('RUN', key='run'):
+if col2.button('RUN', key='run'):
     # initializing class
     model = TreeOptionPricing(params)
     
