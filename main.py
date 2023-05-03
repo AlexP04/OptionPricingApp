@@ -17,7 +17,7 @@ st.title('Option Pricing Models')
 col1, col2 = st.columns(spec=[2, 2])
 
 
-st.header('Stock information:')
+col1.header('Stock information:')
 # entering stocks data
 try:
     stocks_prices = col1.file_uploader('Input stock prices timeseries: ', type=['csv'], key='input_file')
@@ -31,17 +31,17 @@ derive_sigma = col1.checkbox("Enable sigma derivation from data", value=True)
 sigma = col1.number_input('Custom sigma (if preciding option is disabled)', value= 0.0, step=0.1, key='sigma')
 
 
-st.header('Option information:')
+col1.header('Option information:')
 # options parameters
 strike_price = col1.number_input('Strike price', value=100.0, step=0.1, key='strike_price')
 expiry_date = col1.text_input('Expiry date', value="", key='expiry_date')
 option_type = col1.radio('Option type', ['call', 'put'])
 
-st.header('Market information:')
+col2.header('Market information:')
 # market info
 risk_free_rate = col2.number_input('Risk free rate (%)', value=0.0, step=0.1, key='risk_free_rate')
 
-st.header('Model specification')
+col2.header('Model specification')
 # specify number of sibling nodes - 2 = binomial, 3 = trinomaial, 4+ - generalized model.
 number_of_variants = col2.number_input('Number of variants for a model (2 - binomial,  3- trinomial, 4+ - generalized model)', value=2, step=1, key='n')
 
