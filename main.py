@@ -33,13 +33,13 @@ sigma = col1.number_input('Custom sigma (if preciding option is disabled)', valu
 
 st.header('Option information:')
 # options parameters
-strike_price = col1.number_input('Strike price', value=100, step=0.1, key='strike_price')
+strike_price = col1.number_input('Strike price', value=100.0, step=0.1, key='strike_price')
 expiry_date = col1.text_input('Expiry date', value="", key='expiry_date')
 option_type = col1.radio('Option type', ['call', 'put'])
 
 st.header('Market information:')
 # market info
-risk_free_rate = col1.number_input('Risk free rate (%)', value=0, step=0.1, key='risk_free_rate')
+risk_free_rate = col1.number_input('Risk free rate (%)', value=0.0, step=0.1, key='risk_free_rate')
 
 st.header('Model specification')
 # specify number of sibling nodes - 2 = binomial, 3 = trinomaial, 4+ - generalized model.
