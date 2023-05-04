@@ -72,14 +72,14 @@ if col2.button('RUN', key='run'):
     # output - trees for stock and option prices
     col2.download_button(
                 label='Download output file (stock prices tree)',
-                data=model.build_trees()[1],
-                file_name="stocks_tree.xlsx"
+                data=model.build_trees()[1]
+#                 file_name="stocks_tree.xlsx"
             )
     
     col2.download_button(
                 label='Download output file (options prices tree)',
-                data=model.build_trees()[0],
-                file_name="options_tree.xlsx"
+                data=model.build_trees()[0]
+#                 file_name="options_tree.xlsx"
             )
     
     #predict for time we are interested for (in 0)
