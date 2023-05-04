@@ -72,13 +72,13 @@ if col2.button('RUN', key='run'):
     # output - trees for stock and option prices
     col2.download_button(
                 label='Download output file (stock prices tree)',
-                data=fout,
+                data=model.build_trees()[1],
                 file_name="stocks_tree"
             )
     
     col2.download_button(
                 label='Download output file (options prices tree)',
-                data=fout,
+                data=model.build_trees()[0],
                 file_name="options_tree"
             )
     
