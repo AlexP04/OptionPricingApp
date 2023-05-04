@@ -22,10 +22,11 @@ col1.header('Stock information:')
 try:
     stock_prices = col1.file_uploader('Input stock prices timeseries: ', type=['csv'], key='input_file')
     stock_prices = pd.read_csv(stocks_prices, delimiter=',', decimal='.', index_col=0)
-    col1.header(print( stock_prices.header()))
+    stock_prices = pd.Series(data = list(stock_prices[stock_prices.columns[1]]), index = stock_prices[stock_prices.columns[0]]) 
 except:
     # default case - no data entered
     stock_prices = pd.read_csv('default_stock_data.csv', delimiter=',', decimal='.', index_col=0)
+    stock_prices = pd.Series(data = list(stock_prices[stock_prices.columns[1]]), index = stock_prices[stock_prices.columns[0]]) 
     col1.header('Check input again')
     
 derive_sigma = col1.checkbox("Enable sigma derivation from data", value=True)
