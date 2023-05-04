@@ -307,7 +307,6 @@ class TreeOptionPricing():
     def predict(self, timestamp, aggregation_method = 'mean'):
         # timestamp - time at which option price we are looking for (need to have fit function implemented)
         
-        assert isinstance(timestamp, type(self.stock_prices.index[0]) ), "Timestamp given is not in correct type, should match with stock prices"
         assert timestamp <= max(self.stock_prices.index), "Timestamp given should be lower than maximum date avaliaible"
         assert timestamp <= self.expiration_date, "Timestamp input should bve less or equal to expiration date"
         assert aggregation_method in ['mean', 'max', 'min'], "Aggregation method should be in following list: \'mean\', \'max\', \'min\' "
