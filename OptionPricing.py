@@ -151,10 +151,7 @@ class TreeOptionPricing():
             # general model for more n > 3
             # solution that consist from factors and probabilities in that order (+ auxiliary variable that is odd)
             solution = fsolve(self.__system_equations, [2]*(self.variants-1)+[0.5]+[1/self.variants]*self.variants+[2])
-            solution2 = fsolve(self.__system_equations, [0.25]*(self.variants-1)+[0.1]+[1/self.variants]*self.variants+[3])
             
-            print(solution)
-            print(solution2)
             # retrieving factors and probabilities
             self.factors = solution[:self.variants].copy()
             self.probabilities = solution[self.variants:-1].copy()
@@ -304,27 +301,32 @@ class TreeOptionPricing():
         # build tree for option prices
         self.backward_tree_build(accuracy = accuracy, vocab = vocab)
     
-    def predict(self, timestamp, aggregation_method = 'mean'):
+    def predict(self, timestamp, aggregation_method = 'max'):
         # timestamp - time at which option price we are looking for (need to have fit function implemented)
         
-#         assert timestamp <= max(self.stock_prices.index), "Timestamp given should be lower than maximum date avaliaible"
-#         assert timestamp <= self.expiration_date, "Timestamp input should be less or equal to expiration date"
+        max_index = list(self.stock_prices.index).index(max(self.stock_prices.index))
+        expr_index = list(self.stock_prices.index).index(self.expiration_date)
+           
+        assert timestamp <= max_index, "Timestamp given should be lower than maximum date avaliaible"
+        assert timestamp <= expr_index, "Timestamp input should be less or equal to expiration date"
         assert aggregation_method in ['mean', 'max', 'min'], "Aggregation method should be in following list: \'mean\', \'max\', \'min\' "
         
-        count_index = 0
-        for i in range(len(self.stock_prices.index)):
-            date = self.stock_prices.index[i]
-            if date == timestamp:
-                break
-                
-            count_index += 1
-        
-        count_index = len(self.stock_prices.index) - 1 - count_index
-        
+        timestamp = len(self.option_layers) - 1 - timestamp
+
+        print(timestamp)
+        print()
         if aggregation_method == 'mean':
-            return np.mean(self.option_layers[count_index])
+            return np.mean(self.option_layers[timestamp])
         elif aggregation_method == 'max':
-            return max(self.option_layers[count_index])
+            return max(self.option_layers[timestamp])
         elif aggregation_method == 'min':
-            return min(self.option_layers[count_index])
+            return min(self.option_layers[timestamp])
         
+    
+    def build_trees(self):
+        result_options = pd.DataFrame(self.option_layers[-1:0:-1]).T
+        result_stock = pd.DataFrame(self.layers[-1:0:-1]).T
+        
+        return result_options, result_stock
+    
+    
