@@ -28,7 +28,9 @@ except:
     stock_prices = pd.read_csv('default_stock_data.csv')
     stock_prices = pd.Series(data = list(stock_prices[stock_prices.columns[1]]), index = stock_prices[stock_prices.columns[0]]) 
     col1.header('Check input again')
-    
+
+     
+output_stocks = col1.text_input('Output file name (stocks)', value='output_1', key='output_file_1')
 derive_sigma = col1.checkbox("Enable sigma derivation from data", value=True)
 sigma = col1.number_input('Custom sigma (if preciding option is disabled)', value= 0.0, step=0.1, key='sigma')
 
@@ -38,6 +40,7 @@ col1.header('Option information:')
 strike_price = col1.number_input('Strike price', value=100.0, step=0.1, key='strike_price')
 expiry_date = col1.text_input('Expiry date', value="", key='expiry_date')
 option_type = col1.radio('Option type', ['call', 'put'])
+output_options = col1.text_input('Output file name (options)', value='output_2', key='output_file_2')
 
 col2.header('Market information:')
 # market info
