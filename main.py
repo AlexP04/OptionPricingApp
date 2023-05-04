@@ -70,6 +70,17 @@ if col2.button('RUN', key='run'):
     model.fit( accuracy = accuracy)
     
     # output - trees for stock and option prices
+    col2.download_button(
+                label='Download output file (stock prices tree)',
+                data=fout,
+                file_name="stocks_tree"
+            )
+    
+    col2.download_button(
+                label='Download output file (options prices tree)',
+                data=fout,
+                file_name="options_tree"
+            )
     
     #predict for time we are interested for (in 0)
     res = model.predict( 0, "mean")
