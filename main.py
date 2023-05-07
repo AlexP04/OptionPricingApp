@@ -72,8 +72,8 @@ if col2.button('RUN', key='run'):
     # fit
     model.fit( accuracy = accuracy)
     
-    tree_stocks = model.build_trees()[1]
-    tree_options = model.build_trees()[0]
+    tree_stocks = pd.DataFrame(model.build_trees()[1])
+    tree_options = pd.DataFrame(model.build_trees()[0])
     
     # output - trees for stock and option prices
     col2.download_button(
