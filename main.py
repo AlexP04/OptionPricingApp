@@ -73,16 +73,18 @@ if col2.button('RUN', key='run'):
     model.fit( accuracy = accuracy)
     
     # output - trees for stock and option prices
-    col2.download_button(
+    with open(output_stocks, 'rb') as fout:
+            col2.download_button(
                 label='Download output file (stock prices tree)',
-                data=open(output_stocks+".csv", 'rb'),
-                file_name="stocks_tree.csv"
+                data=fout,
+                file_name=params['output_file']
             )
-    
-    col2.download_button(
+            
+    with open(output_options, 'rb') as fout:
+            col2.download_button(
                 label='Download output file (options prices tree)',
-                data=open(output_options+".csv", 'rb'),
-                file_name="options_tree.csv"
+                data=fout,
+                file_name=params['output_file']
             )
     
     #predict for time we are interested for (in 0)
