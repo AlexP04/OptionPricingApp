@@ -73,14 +73,14 @@ if col2.button('RUN', key='run'):
     model.fit( accuracy = accuracy)
     
     # output - trees for stock and option prices
-    with open(output_stocks, 'rb') as fout:
+    with open(output_stocks+".csv", 'rb') as fout:
             col2.download_button(
                 label='Download output file (stock prices tree)',
                 data=fout,
                 file_name=params['output_file']
             )
             
-    with open(output_options, 'rb') as fout:
+    with open(output_options+".csv", 'rb') as fout:
             col2.download_button(
                 label='Download output file (options prices tree)',
                 data=fout,
