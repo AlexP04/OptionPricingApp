@@ -46,51 +46,52 @@ class TreeOptionPricing():
         assert input_parameters['time_step'] > 0, "Time step that is used should be positive"
         self.time_step  = input_parameters['time_step']/365
     
-    def __system_equations(self, x):
+    def __arbitrage_equation(self, u):
+        
+        # solution from constraints
+        solution = self.__system_equations(u)
+        
+        # factors and probabilities from solution
+        factors = solution[1].copy()
+        probabilities = solution[0].copy()
+
+        # arbitrage equations
+        expectance = np.sum(factors*probabilities)
+        risk_free_increment = np.exp(self.risk_free_rate*self.time_step)
+        arbitrage_equation = expectance - risk_free_increment
+        
+        # taking abs(...)    
+        return abs(arbitrage_equation)
+
+        
+    def __system_equations(self, u):
         # just local variable that contains number of variants
         midpoint = self.variants
         
         # init current factors (for adjustment of stock price) and probabilities (for each factor adjustment)
-        factors = np.array(x[0:midpoint])
-        probabilities = np.array(x[midpoint:-1])
-        
-        # auxiliary variable 
-        u = x[-1]
-        
-        # equation for abscence of arbitrage possibilities on market (there is no free lunch)
-        expectance = np.sum(factors*probabilities)
-        risk_free_increment = np.exp(self.risk_free_rate*self.time_step)
-        arbitrage_equation = expectance - risk_free_increment
-
-        # equations to make tree recombining
-        factor_equations_reverse = []
-        for i in range(int(midpoint/2)):
-            factor_equations_reverse.append(factors[i] - 1/factors[midpoint -1 -i])
+        factors = np.zeros(midpoint)
+        probabilities = np.zeros(midpoint)
         
         # factors should be degrees of some number u (auxiliary variable)
-        factor_equations_equality = []
         for i in range(0, int(midpoint/2)):
-            factor_equations_equality.append(factors[i] - u**( int(midpoint/2) -i))
+            factors[i] = u**( int(midpoint/2) -i)
+    
+        # equations to make tree recombining   
+        for i in range(int(midpoint/2)):
+            factors[midpoint -1 -i] = 1/factors[i]
 
         if midpoint%2 == 1:
-            factor_equations_equality.append(factors[int(midpoint/2)] - 1)
+            factors[int(midpoint/2)] = 1
         
-        # sum of probabilities is equal to 1  
-        probability_equations = []
+        sum_prob = 0
+        # probabilities equation
+        expanded_list = [*factors, np.exp(self.risk_free_rate*self.time_step)]
+        expanded_list.sort()
+                                          
+        for i in range(0, midpoint):
+            probabilities[i] = (expanded_list[i+1]- expanded_list[i])/( factors[0] - factors[midpoint - 1])
 
-        for i in range(1, midpoint):
-            
-            probability_equations.append(
-                probabilities[i] - (
-                    factors[i-1] - factors[i]
-                )/(
-                    factors[0] - factors[midpoint - 1]
-                )
-            
-            )
-        
-        return (arbitrage_equation, *factor_equations_equality, 
-                *factor_equations_reverse, *probability_equations, 0)
+        return probabilities, factors
         
         
     def forward_initialization(self):
@@ -150,11 +151,10 @@ class TreeOptionPricing():
         else:
             # general model for more n > 3
             # solution that consist from factors and probabilities in that order (+ auxiliary variable that is odd)
-            solution = fsolve(self.__system_equations, [2]*(self.variants-1)+[0.5]+[1/self.variants]*self.variants+[2])
+            x = minimize(self.__arbitrage_equation, 2)['x']
             
-            # retrieving factors and probabilities
-            self.factors = solution[:self.variants].copy()
-            self.probabilities = solution[self.variants:-1].copy()
+            self.probabilities = self.__system_equations(x[0])[0]
+            self.factors = self.__system_equations(x[0])[1]
     
     def __next_layer_build(self, is_first = False, digits_to_round = 4):
         # digits_to_round is a accuracy input (number of digits to round)
