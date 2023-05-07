@@ -204,8 +204,11 @@ class TreeOptionPricing():
         assert isinstance(vocab, bool), "Vocab variable should be boolean type"
         
         text = self.__next_layer_build(is_first = True, digits_to_round = accuracy)
-            
-        for date in list(self.stock_prices.index[1:]):
+        
+        iteration_list = list(set(self.stock_prices.index[1:]))
+        iteration_list.sort()
+        
+        for date in iteration_list:
             if vocab:
                 print(text)
                 
@@ -213,8 +216,9 @@ class TreeOptionPricing():
                 if vocab:
                     print("Tree initialized for stocks")
                 return "Tree initialized for stocks"
+            
             text = self.__next_layer_build(is_first = False, digits_to_round = accuracy)
-        
+            print(self.layers)
         if vocab:
             print("Tree initialized for stocks, option expiry date is out of stock history present")
             
@@ -324,12 +328,9 @@ class TreeOptionPricing():
         
     
     def build_trees(self):
-        result_options = pd.DataFrame(self.option_layers[-1:0:-1]).T
-        result_stock = pd.DataFrame(self.layers[0:-1:1]).T
+        result_options = pd.DataFrame(self.option_layers).T
+        result_stock = pd.DataFrame(self.layers).T
         
         return result_options, result_stock
-    
-    
-
     
     
