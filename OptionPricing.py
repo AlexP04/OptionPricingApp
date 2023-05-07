@@ -329,7 +329,14 @@ class TreeOptionPricing():
     
     def build_trees(self):
         result_options = pd.DataFrame(self.option_layers).T
+        
+        cols_stock = ["№"+str(i+1) for i in range(len(result_options.columns))]
+        cols_options = ["№"+str(len(result_options.columns) - i) for i in range(len(result_options.columns))]
+
+        result_options.columns = cols_options
+        
         result_stock = pd.DataFrame(self.layers).T
+        result_stock.columns = cols_stock
         
         return result_options, result_stock
     
