@@ -77,7 +77,7 @@ if col2.button('RUN', key='run'):
     
     # output - trees for stock and option prices
     st.header("Tree for stock prices")
-    st.write(tree_stocks.T)
+    st.write(tree_stocks)
     
     st.header("Tree for option prices")
     st.write(tree_options)      
