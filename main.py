@@ -27,7 +27,6 @@ except:
     # default case - no data entered
     stock_prices = pd.read_csv('default_stock_data.csv')
     stock_prices = pd.Series(data = list(stock_prices[stock_prices.columns[1]]), index = stock_prices[stock_prices.columns[0]]) 
-    col1.header('Check input again')
 
      
 # output_stocks = col1.text_input('Output file name (stocks)', value='output_1', key='output_file_1')
