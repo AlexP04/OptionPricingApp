@@ -37,10 +37,10 @@ sigma = col1.number_input('Custom sigma (if preciding option is disabled)', valu
 
 col1.header('Option information:')
 # options parameters
+output_options = col1.text_input('Output file name (options)', value='output_2', key='output_file_2')
 strike_price = col1.number_input('Strike price', value=100.0, step=0.1, key='strike_price')
 expiry_date = col1.text_input('Expiry date', value="", key='expiry_date')
 option_type = col1.radio('Option type', ['call', 'put'])
-output_options = col1.text_input('Output file name (options)', value='output_2', key='output_file_2')
 
 col2.header('Market information:')
 # market info
@@ -75,13 +75,13 @@ if col2.button('RUN', key='run'):
     # output - trees for stock and option prices
     col2.download_button(
                 label='Download output file (stock prices tree)',
-                data=open("stocks_tree.csv", 'rb'),
+                data=open(output_stocks+".csv", 'rb'),
                 file_name="stocks_tree.csv"
             )
     
     col2.download_button(
                 label='Download output file (options prices tree)',
-                data=open("options_tree.csv", 'rb'),
+                data=open(output_options+".csv", 'rb'),
                 file_name="options_tree.csv"
             )
     
