@@ -76,7 +76,10 @@ if col2.button('RUN', key='run'):
     tree_options = pd.DataFrame(model.build_trees()[0])
     
     # output - trees for stock and option prices
+    st.header("Tree for stock prices")
     st.write(tree_stocks)
+    
+    st.header("Tree for option prices")
     st.write(tree_options)      
    
     
