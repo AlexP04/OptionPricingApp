@@ -76,17 +76,9 @@ if col2.button('RUN', key='run'):
     tree_options = pd.DataFrame(model.build_trees()[0])
     
     # output - trees for stock and option prices
-    col2.download_button(
-        label='Download output file (stock prices tree)',
-        data=tree_stocks,
-        file_name="output_stock_tree.csv"
-    )
-            
-    col2.download_button(
-        label='Download output file (options prices tree)',
-        data=tree_options,
-        file_name="output_options_tree.csv"
-    )
+    st.write(tree_stocks)
+    st.write(tree_options)      
+   
     
     #predict for time we are interested for (in 0)
     res = model.predict( 0, "mean")
