@@ -30,14 +30,14 @@ except:
     col1.header('Check input again')
 
      
-output_stocks = col1.text_input('Output file name (stocks)', value='output_1', key='output_file_1')
+# output_stocks = col1.text_input('Output file name (stocks)', value='output_1', key='output_file_1')
 derive_sigma = col1.checkbox("Enable sigma derivation from data", value=True)
 sigma = col1.number_input('Custom sigma (if preciding option is disabled)', value= 0.0, step=0.1, key='sigma')
 
 
 col1.header('Option information:')
 # options parameters
-output_options = col1.text_input('Output file name (options)', value='output_2', key='output_file_2')
+# output_options = col1.text_input('Output file name (options)', value='output_2', key='output_file_2')
 strike_price = col1.number_input('Strike price', value=100.0, step=0.1, key='strike_price')
 expiry_date = col1.text_input('Expiry date', value="", key='expiry_date')
 option_type = col1.radio('Option type', ['call', 'put'])
@@ -68,23 +68,25 @@ accuracy = col2.number_input('Accuracy for model (number of digits):', value=2, 
 if col2.button('RUN', key='run'):
     # initializing class
     model = TreeOptionPricing(params)
+    tree_stocks = model.build_trees()[1]
+    tree_options = model.build_trees()[0]
     
     # fit
     model.fit( accuracy = accuracy)
     
     # output - trees for stock and option prices
-    with open(output_stocks+".csv", 'rb') as fout:
+    with tree_stocks as fout:
             col2.download_button(
                 label='Download output file (stock prices tree)',
                 data=fout,
-                file_name=params['output_file']
+                file_name="output_stock_tree.csv"
             )
             
-    with open(output_options+".csv", 'rb') as fout:
+    with tree_options as fout:
             col2.download_button(
                 label='Download output file (options prices tree)',
                 data=fout,
-                file_name=params['output_file']
+                file_name="output_options_tree.csv"
             )
     
     #predict for time we are interested for (in 0)
