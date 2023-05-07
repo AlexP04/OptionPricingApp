@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from scipy.optimize import fsolve
+from scipy.optimize import minimize
 
 class TreeOptionPricing():
     def __init__(self, input_parameters):
