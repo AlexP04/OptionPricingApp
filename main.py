@@ -76,19 +76,17 @@ if col2.button('RUN', key='run'):
     tree_options = model.build_trees()[0]
     
     # output - trees for stock and option prices
-    with tree_stocks as fout:
-            col2.download_button(
-                label='Download output file (stock prices tree)',
-                data=fout,
-                file_name="output_stock_tree.csv"
-            )
+    col2.download_button(
+        label='Download output file (stock prices tree)',
+        data=tree_stocks,
+        file_name="output_stock_tree.csv"
+    )
             
-    with tree_options as fout:
-            col2.download_button(
-                label='Download output file (options prices tree)',
-                data=fout,
-                file_name="output_options_tree.csv"
-            )
+    col2.download_button(
+        label='Download output file (options prices tree)',
+        data=tree_options,
+        file_name="output_options_tree.csv"
+    )
     
     #predict for time we are interested for (in 0)
     res = model.predict( 0, "mean")
