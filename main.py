@@ -68,11 +68,12 @@ accuracy = col2.number_input('Accuracy for model (number of digits):', value=2, 
 if col2.button('RUN', key='run'):
     # initializing class
     model = TreeOptionPricing(params)
-    tree_stocks = model.build_trees()[1]
-    tree_options = model.build_trees()[0]
     
     # fit
     model.fit( accuracy = accuracy)
+    
+    tree_stocks = model.build_trees()[1]
+    tree_options = model.build_trees()[0]
     
     # output - trees for stock and option prices
     with tree_stocks as fout:
