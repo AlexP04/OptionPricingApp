@@ -223,7 +223,7 @@ class TreeOptionPricing():
             
             text = self.__next_layer_build(is_first = False, digits_to_round = accuracy)
   
-            if index >= self.number_of_steps:
+            if index > self.number_of_steps:
                 return  print("Tree initialized for stocks")
             
             index += 1
