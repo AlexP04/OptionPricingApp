@@ -210,7 +210,7 @@ class TreeOptionPricing():
         
         iteration_list = list(set(self.stock_prices.index[1:]))
         iteration_list.sort()
-        index = 0
+        index = 1
         for date in iteration_list:
             if vocab:
                 print(text)
@@ -222,11 +222,10 @@ class TreeOptionPricing():
                 return "Tree not initialized for stocks correct"
             
             text = self.__next_layer_build(is_first = False, digits_to_round = accuracy)
-  
-            if index >= self.number_of_steps:
-                return "Tree initialized for stocks"
-            
             index += 1
+            if index > self.number_of_steps:
+                return "Tree initialized for stocks"
+    
         
         if vocab:
             print("Tree initialized for stocks, option expiry date is out of stock history present")
