@@ -48,6 +48,7 @@ risk_free_rate = col2.number_input('Risk free rate (%)', value=2.0, step=0.1, ke
 col2.header('Model specification')
 # specify number of sibling nodes - 2 = binomial, 3 = trinomaial, 4+ - generalized model.
 number_of_variants = col2.number_input('Number of variants for a model (2 - binomial,  3- trinomial, 4+ - generalized model)', value=2, step=1, key='n')
+step_number = col2.number_input('Number of steps for a model', value=2, step=1, key='number_of_steps')
 
 params = {
     "stock_prices": stock_prices,
@@ -58,7 +59,8 @@ params = {
     'derive_sigma': derive_sigma,
     'sigma': sigma,
     'time_step': 1,
-    'type': option_type
+    'type': option_type,
+    'number_of_steps': step_number
 }
 
 accuracy = col2.number_input('Accuracy for model (number of digits):', value=2, step=1, key='accuracy')
