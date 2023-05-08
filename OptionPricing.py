@@ -215,7 +215,7 @@ class TreeOptionPricing():
             if vocab:
                 print(text)
                 
-            if date > self.expiration_date:
+            if date >= self.expiration_date:
                 if vocab:
                     print("Tree is out of expiry date")
                    
@@ -223,12 +223,11 @@ class TreeOptionPricing():
             
             text = self.__next_layer_build(is_first = False, digits_to_round = accuracy)
   
-            if index > self.number_of_steps:
-                return  print("Tree initialized for stocks")
+            if index >= self.number_of_steps:
+                return "Tree initialized for stocks"
             
             index += 1
-            
-            print(self.layers)
+        
         if vocab:
             print("Tree initialized for stocks, option expiry date is out of stock history present")
             
