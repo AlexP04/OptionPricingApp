@@ -222,9 +222,11 @@ class TreeOptionPricing():
                 return "Tree not initialized for stocks correct"
             
             text = self.__next_layer_build(is_first = False, digits_to_round = accuracy)
-            index += 1
+  
             if index >= self.number_of_steps:
                 return  print("Tree initialized for stocks")
+            
+            index += 1
             
             print(self.layers)
         if vocab:
@@ -325,8 +327,6 @@ class TreeOptionPricing():
         
         timestamp = len(self.option_layers) - 1 - timestamp
 
-        print(timestamp)
-        print()
         if aggregation_method == 'mean':
             return np.mean(self.option_layers[timestamp])
         elif aggregation_method == 'max':
