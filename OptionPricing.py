@@ -21,6 +21,9 @@ class TreeOptionPricing():
         assert input_parameters['risk_free_rate'] > 0, "Risk-free rate should be positive"
         self.risk_free_rate = 1 + input_parameters['risk_free_rate']/100
         
+        assert input_parameters['number_of_steps'] > 0, "Number of steps should be positive"
+        self.number_of_steps = input_parameters['number_of_steps']
+        
        
         assert isinstance(input_parameters['stock_prices'], pd.Series), "Stock prices time series should be Series datatype"
         assert input_parameters['stock_prices'].shape[0] > 0, "Stock prices time series should be not empty"
@@ -207,17 +210,22 @@ class TreeOptionPricing():
         
         iteration_list = list(set(self.stock_prices.index[1:]))
         iteration_list.sort()
-        
+        index = 0
         for date in iteration_list:
             if vocab:
                 print(text)
                 
             if date > self.expiration_date:
                 if vocab:
-                    print("Tree initialized for stocks")
-                return "Tree initialized for stocks"
+                    print("Tree is out of expiry date")
+                   
+                return "Tree not initialized for stocks correct"
             
             text = self.__next_layer_build(is_first = False, digits_to_round = accuracy)
+            index += 1
+            if index >= self.number_of_steps:
+                return  print("Tree initialized for stocks")
+            
             print(self.layers)
         if vocab:
             print("Tree initialized for stocks, option expiry date is out of stock history present")
