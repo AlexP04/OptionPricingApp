@@ -278,7 +278,7 @@ class TreeOptionPricing():
             
         # rounding and sorting
         next_layer = [round(elem, digits_to_round) for elem in next_layer]
-
+        next_layer.sort()
         
         self.option_layers.append(next_layer)
 
@@ -317,8 +317,10 @@ class TreeOptionPricing():
         # timestamp - time at which option price we are looking for (need to have fit function implemented)
         
         max_index = list(self.stock_prices.index).index(max(self.stock_prices.index))
-        expr_index = list(self.stock_prices.index).index(self.expiration_date)
-           
+        try:
+            expr_index = list(self.stock_prices.index).index(self.expiration_date)
+        except:
+            expr_index = len(list(self.stock_prices.index))-1
         assert timestamp <= max_index, "Timestamp given should be lower than maximum date avaliaible"
         assert timestamp <= expr_index, "Timestamp input should be less or equal to expiration date"
         assert aggregation_method in ['mean', 'max', 'min'], "Aggregation method should be in following list: \'mean\', \'max\', \'min\' "
