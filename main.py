@@ -33,7 +33,6 @@ except:
 derive_sigma = col1.checkbox("Enable sigma derivation from data", value=True)
 sigma = col1.number_input('Custom sigma (if preciding option is disabled)', value= 0.0, step=0.1, key='sigma')
 
-
 col1.header('Option information:')
 # options parameters
 # output_options = col1.text_input('Output file name (options)', value='output_2', key='output_file_2')
@@ -44,6 +43,7 @@ option_type = col1.radio('Option type', ['call', 'put'])
 col2.header('Market information:')
 # market info
 risk_free_rate = col2.number_input('Risk free rate (%)', value=2.0, step=0.1, key='risk_free_rate')
+current_date = col1.text_input('Current date', value="", key='current_date')
 
 col2.header('Model specification')
 # specify number of sibling nodes - 2 = binomial, 3 = trinomaial, 4+ - generalized model.
@@ -58,7 +58,7 @@ params = {
     "expiration_date": expiry_date,
     'derive_sigma': derive_sigma,
     'sigma': sigma,
-    'time_step': 1,
+    'current_date': current_date,
     'type': option_type,
     'number_of_steps': step_number
 }
