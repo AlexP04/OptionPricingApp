@@ -85,7 +85,7 @@ if col2.button('RUN', key='run'):
    
     
     #predict for time we are interested for (in 0)
-    res = model.predict( 0, "mean")
+    res = model.predict()
     
     col2.write('Prediction result:' + str(res))
     
